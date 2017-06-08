@@ -1,0 +1,1049 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Android7.0," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。 APK文件下载对于APK文件的下载，我这里介绍两种方式  系统自带的DownloadManager下载 通过异步任务Asyn">
+<meta name="keywords" content="Android,Android7.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android下载APK自动安装(兼容7.0版本)">
+<meta property="og:url" content="http://yoursite.com/2017/06/08/Android下载APK自动安装-兼容7-0版本/index.html">
+<meta property="og:site_name" content="Freelander_Blog">
+<meta property="og:description" content="前言在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。 APK文件下载对于APK文件的下载，我这里介绍两种方式  系统自带的DownloadManager下载 通过异步任务Asyn">
+<meta property="og:updated_time" content="2017-06-08T10:01:53.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android下载APK自动安装(兼容7.0版本)">
+<meta name="twitter:description" content="前言在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。 APK文件下载对于APK文件的下载，我这里介绍两种方式  系统自带的DownloadManager下载 通过异步任务Asyn">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/08/Android下载APK自动安装-兼容7-0版本/"/>
+
+
+
+
+
+  <title>Android下载APK自动安装(兼容7.0版本) | Freelander_Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Freelander_Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">未知，才是最可怕的</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/08/Android下载APK自动安装-兼容7-0版本/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shijie Yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/freelander.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Freelander_Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android下载APK自动安装(兼容7.0版本)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-08T18:01:01+08:00">
+                2017-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。</p>
+<h2 id="APK文件下载"><a href="#APK文件下载" class="headerlink" title="APK文件下载"></a>APK文件下载</h2><p>对于APK文件的下载，我这里介绍两种方式</p>
+<ul>
+<li>系统自带的DownloadManager下载</li>
+<li>通过异步任务AsyncTask去实现下载</li>
+</ul>
+<h3 id="DownloadManager方式"><a href="#DownloadManager方式" class="headerlink" title="DownloadManager方式"></a>DownloadManager方式</h3><p>DownloadManager是Android系统自带的提供下载功能类，通过查看DownloadManager的源码我们知道在这个类中主要是有两个静态内部类Request和Query。</p>
+<pre><code>public class DownloadManager {
+    ...
+
+    /**
+     * Enqueue a new download.  
+     * The download will start automatically once the download manager isready to execute it 
+     * and connectivity is available.
+     *
+    */
+    public long enqueue(Request request) {
+        ...
+    }
+
+    /**
+    * This class contains all the information necessary to request a new download. 
+    * The URI is the only required parameter.
+    *
+    */
+    public static class Request {
+        ...
+    }
+
+    /**
+    * This class may be used to filter download manager queries.
+    *
+    */
+    public static class Query {
+        ...
+    }
+}
+</code></pre><p>通过注释内容很明白的看出Request是负责下载的类（Url作为唯一的参数），Query用于查询下载的信息（例如下载进度，文件大小等），enqueue()方法执行下载。</p>
+<h4 id="下载APK"><a href="#下载APK" class="headerlink" title="下载APK"></a>下载APK</h4><h5 id="获取DownloadManager对象"><a href="#获取DownloadManager对象" class="headerlink" title="获取DownloadManager对象"></a>获取DownloadManager对象</h5><p>DownloadManager属于系统服务，我们需要通过getSystemService来获取他的对象：</p>
+<pre><code>DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+</code></pre><h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p>DownloadManager下载执行enqueue(Request request)方法，该方法接收一个Request对象，因此我们需要新建一个Request对象，该静态内部类的唯一构造方法接收一个Uri参数，即下载地址；下面贴一下这两个重要的方法：</p>
+<pre><code>public long enqueue(Request request) {
+    ContentValues values = request.toContentValues(mPackageName);
+    Uri downloadUri = mResolver.insert(Downloads.Impl.CONTENT_URI, values);
+    long id = Long.parseLong(downloadUri.getLastPathSegment());
+    return id;
+}
+
+public static class Request {
+    ...
+    public Request(Uri uri) {
+        if (uri == null) {
+            throw new NullPointerException();
+        }
+        String scheme = uri.getScheme();
+        if (scheme == null || (!scheme.equals(&quot;http&quot;) &amp;&amp; !scheme.equals(&quot;https&quot;))) {
+            throw new IllegalArgumentException(&quot;Can only download HTTP/HTTPS URIs: &quot; + uri);
+        }
+        mUri = uri;
+    }
+
+    public Request setDestinationUri(Uri uri) {
+        mDestinationUri = uri;
+        return this;
+    }
+}
+</code></pre><p>DownloadManager类中的enqueue()方法源码很简单，将下载请求加入到下载队列，去执行下载任务，返回一个long类型对象，也就是下载任务的id，到时候我们会根据这个id去查询下载的进度。</p>
+<p>静态内部类Request的唯一构造方法接收一个Uri类型的参数，根据源码中的注释可以知道，该参数只接受http或https类型的Uri地址，否则会抛出异常。</p>
+<p>setDestinationUri()方法为下载的APK设置保存地址。</p>
+<pre><code>private void download() {
+    File installFile = new File(this.filePath + this.fileName);
+    if (installFile.exists()) {
+        installFile.delete();
+    }
+    // 下载应用
+    DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+    Uri uri = Uri.parse(this.serverUrl + &quot;download/xxx.apk&quot;);
+    DownloadManager.Request request = new DownloadManager.Request(uri);
+    request.setDestinationUri(Uri.fromFile(installFile));
+    long downloadReference = downloadManager.enqueue(request);
+    // 下载前注册完成监听
+    registerDownLoadFinishReceiver();
+}
+</code></pre><h5 id="下载进度查询"><a href="#下载进度查询" class="headerlink" title="下载进度查询"></a>下载进度查询</h5><p>上面说到的在DownloadManager类中有个静态内部类Query用于查询下载的进度。上面在执行下载任务的时候，执行enqueue()方法返回的一个long类型的结果，这个结果将用作查询进度的参数。调用DownloadManager的query()方法，返回一个Cursor对象，通过这个游标对象来查询已经下载的大小已经APK文件总大小，计算下载的百分比，用于显示ProgressDialog。</p>
+<pre><code>public int getProgress(long downloadId) {
+    DownloadManager mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+    //查询进度
+    DownloadManager.Query query = new DownloadManager.Query().setFilterById(downloadId);
+    Cursor cursor = null;
+    int progress = 0;
+    try {
+        cursor = mDownloadManager.query(query);//获得游标
+        if (cursor != null &amp;&amp; cursor.moveToFirst()) {
+            //当前的下载量
+            int downloadSoFar = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+            //文件总大小
+            int totalBytes = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+            progress = (int) (downloadSoFar * 1.0f / totalBytes * 100);
+        }
+    } finally {
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+    return progress;
+}
+</code></pre><p>下面我们看一下query()方法的源码：</p>
+<pre><code>/**
+ * Query the download manager about downloads that have been requested.
+ *
+ */
+public Cursor query(Query query) {
+    Cursor underlyingCursor = query.runQuery(mResolver, UNDERLYING_COLUMNS, mBaseUri);
+    if (underlyingCursor == null) {
+        return null;
+    }
+    return new CursorTranslator(underlyingCursor, mBaseUri, mAccessFilename);
+}
+</code></pre><p>可以看到执行的还是Query类中的runQuery()方法，具体该方法的源码比较长，这里就不再贴了，有兴趣的可以自己下载源码看一下。</p>
+<h5 id="下载监听"><a href="#下载监听" class="headerlink" title="下载监听"></a>下载监听</h5><p>APK文件下载时，注册一个广播去监听该下载任务，当下载完成之后，提醒我们去执行安装该APK文件，执行安装方法。</p>
+<pre><code>private void registerDownLoadFinishReceiver() {
+    IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (downloadReference == reference) {
+                // 下载完成后取消监听
+                mContext.unregisterReceiver(this);
+                // 安装应用
+                install();
+            }
+        }
+    };
+    mContext.registerReceiver(receiver, filter);
+}
+</code></pre><h3 id="AsyncTask方法下载"><a href="#AsyncTask方法下载" class="headerlink" title="AsyncTask方法下载"></a>AsyncTask方法下载</h3><h4 id="自定义类继承AsyncTask"><a href="#自定义类继承AsyncTask" class="headerlink" title="自定义类继承AsyncTask"></a>自定义类继承AsyncTask</h4><p>自定义异步任务下载类继承AsyncTask，并实现其抽象方法。该类会自动启动子线程去执行耗时操作，然后与UI进行交互，通知UI下载进度。</p>
+<h5 id="下载-1"><a href="#下载-1" class="headerlink" title="下载"></a>下载</h5><p>直接贴代码：</p>
+<pre><code>private class DownloadAPK extends AsyncTask&lt;String, Integer, String&gt; {
+    ProgressDialog progressDialog;
+    File file;
+
+    public DownloadAPK(ProgressDialog progressDialog) {
+        this.progressDialog = progressDialog;
+    }
+
+    @Override
+    protected String doInBackground(String... params) {
+        URL url;
+        HttpURLConnection conn;
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+
+        try {
+            url = new URL(params[0]);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod(&quot;GET&quot;);
+            conn.setConnectTimeout(5000);
+
+            int fileLength = conn.getContentLength();
+            bis = new BufferedInputStream(conn.getInputStream());
+            String fileName = Environment.getExternalStorageDirectory().getPath() + &quot;/xxxapk&quot;;
+            file = new File(fileName);
+            if (!file.exists()) {
+                if (!file.getParentFile().exists()) {
+                    file.getParentFile().mkdirs();
+                }
+                file.createNewFile();
+            }
+            fos = new FileOutputStream(file);
+            byte data[] = new byte[4 * 1024];
+            long total = 0;
+            int count;
+            while ((count = bis.read(data)) != -1) {
+                total += count;
+                publishProgress((int) (total * 100 / fileLength));
+                fos.write(data, 0, count);
+                fos.flush();
+            }
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... progress) {
+        super.onProgressUpdate(progress);
+        progressDialog.setProgress(progress[0]);
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        openFile(file);
+        progressDialog.dismiss();
+    }
+}
+</code></pre><h5 id="UI显示进度"><a href="#UI显示进度" class="headerlink" title="UI显示进度"></a>UI显示进度</h5><p>该方法会自己去创建子线程下载，我们需要在UI界面显示来通知用户下载的进度：</p>
+<pre><code>private void downloadAPK(Context context) {
+    ProgressDialog progressDialog = new ProgressDialog(context);
+    progressDialog.setTitle(&quot;提示&quot;);
+    progressDialog.setMessage(&quot;正在下载...&quot;);
+    progressDialog.setIndeterminate(false);
+    progressDialog.setMax(100);
+    progressDialog.setCancelable(false);
+    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    progressDialog.show();
+    String downloadUrl = &quot;http://xxx.xxx.xx.xx:xxxx/Server/download/xxx.apk&quot;;
+    new DownloadAPK(progressDialog).execute(downloadUrl);
+}
+</code></pre><h2 id="安装APK"><a href="#安装APK" class="headerlink" title="安装APK"></a>安装APK</h2><p>在这里安装apk文件的时候会有一些问题，在Android7.0之后我们不能在像以前那样的方式去直接跳转到系统的安装界面去安装了，需要使用FileProvider来进行。</p>
+<ul>
+<li>Android7.0之前安装APK文件</li>
+<li>Android7.0及以上安装APK文件</li>
+<li>兼容的安装方式</li>
+</ul>
+<h3 id="Android-7-0版本之前"><a href="#Android-7-0版本之前" class="headerlink" title="Android 7.0版本之前"></a>Android 7.0版本之前</h3><p>在7.0之前，我们安装的方式比较简单，直接创建一个Intent，将下载的APK文件地址信息传递进去跳转到系统的安装界面即可。</p>
+<pre><code>public void install() {
+    // 安装指定路径下最新版本的应用
+    File installFile = new File(this.filePath + this.fileName);
+    if (!installFile.exists()) {
+        return;
+    }
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    intent.setDataAndType(Uri.fromFile(installFile), &quot;application/vnd.android.package-archive&quot;);
+    mContext.startActivity(intent);
+}
+</code></pre><h3 id="Android7-0之后"><a href="#Android7-0之后" class="headerlink" title="Android7.0之后"></a>Android7.0之后</h3><p>如果在7.0之后继续用上述方法安装APK文件则会抛出 android.os.FileUriExposedException异常。</p>
+<p>因为在Android7.0之后，为了提高私有文件的安全性，应用的私有目录被限制访问，此设置可防止私有文件的元数据泄漏，导致我们无法传递文件路径。但是Google肯定也给我们提供了其他方式去安装，即使用FileProvider。</p>
+<h4 id="FileProvider"><a href="#FileProvider" class="headerlink" title="FileProvider"></a>FileProvider</h4><p>FileProvider，即在应用间共享文件，对于面向 Android 7.0 的应用，Android 框架执行的 StrictMode API 政策禁止在你的应用外部公开 file:// URI。如果一项包含文件 URI 的 intent 离开你的应用，则应用出现故障，并出现 FileUriExposedException 异常。</p>
+<p>要在应用间共享文件，你应发送一项 content:// URI，并授予 URI 临时访问权限。进行此授权的最简单方式是使用 FileProvider 类。具体了解该类详情可查看Google官网或者API。</p>
+<h4 id="APK安装"><a href="#APK安装" class="headerlink" title="APK安装"></a>APK安装</h4><h5 id="注册provider"><a href="#注册provider" class="headerlink" title="注册provider"></a>注册provider</h5><p>在AndroidManifest.xml中注册provider</p>
+<pre><code>&lt;application
+    ...
+    &gt;
+    &lt;provider
+        android:name=&quot;android.support.v4.content.FileProvider&quot;
+        android:authorities=&quot;${applicationId}.provider&quot;
+        android:grantUriPermissions=&quot;true&quot;
+        android:exported=&quot;false&quot;&gt;
+        &lt;!--元数据--&gt;
+        &lt;meta-data
+            android:name=&quot;android.support.FILE_PROVIDER_PATHS&quot;
+            android:resource=&quot;@xml/file_paths&quot; /&gt;
+    &lt;/provider&gt;
+</code></pre><p>其中：android:authorities表示组件的标识，一般为包名+provider，不能和其他应用的重复；android:grantUriPermission=”true”表示授予Uri临时访问权限；android:exported=”false”表示当前内容提供者是否会被其他应用使用。</p>
+<h5 id="创建xml文件file-paths"><a href="#创建xml文件file-paths" class="headerlink" title="创建xml文件file_paths"></a>创建xml文件file_paths</h5><p>在res目录下新建一个xml文件夹，在其中创建file_paths.xml文件，通过这个文件中的内容来对外暴露的文件夹路径，定义如下：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;paths xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+    &lt;external-path name=&quot;external_files&quot; path=&quot;.&quot; /&gt;
+&lt;/paths&gt;
+</code></pre><p>· name：一个引用字符串</p>
+<p>· path：文件夹”相对路径”，完整路径取决于当前的标签类型。</p>
+<p>注：path可以空，表示指定目录下的所有文件、文件夹都可以被共享。</p>
+<pre><code>&lt;files-path name=&quot;name&quot; path=&quot;path&quot; /&gt;
+</code></pre><p>物理路径相当于Context.getFilesDir() + /path/。</p>
+<pre><code>&lt;cache-path name=&quot;name&quot; path=&quot;path&quot; /&gt;
+</code></pre><p>物理路径相当于Context.getCacheDir() + /path/。</p>
+<pre><code>&lt;external-path name=&quot;name&quot; path=&quot;path&quot; /&gt;
+</code></pre><p>物理路径相当于Environment.getExternalStorageDirectory() + /path/。</p>
+<h5 id="读取FileProvider"><a href="#读取FileProvider" class="headerlink" title="读取FileProvider"></a>读取FileProvider</h5><p>通过FileProvider来进行对Android7.0及以上版本安装APK文件：</p>
+<pre><code>private void openFile(File file) {
+    if (file!=null){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //参数1：上下文,参数2：Provider主机地址 和配置文件中保持一致,参数3：共享的文件
+        Uri apkUri = FileProvider.getUriForFile(context, getContext().getApplicationContext().getPackageName() + &quot;.provider&quot;,file);
+        //添加这一句表示对目标应用临时授权该Uri所代表的文件
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setDataAndType(apkUri, &quot;application/vnd.android.package-archive&quot;);
+        getActivity().startActivity(intent);
+    }
+}
+</code></pre><h3 id="兼容的安装方式"><a href="#兼容的安装方式" class="headerlink" title="兼容的安装方式"></a>兼容的安装方式</h3><p>我们在开发中不能确定到底是哪个版本去使用该APP，所以在代码中需要对版本进行判断，在7.0之前使用之前的安装方式，在7.0之后使用FileProvider来进行文件共享安装：</p>
+<pre><code>private void openFile(File file) {
+    if (file!=null){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // 判断版本是否在7.0以上
+        if(Build.VERSION.SDK_INT&gt;=24) {
+            //参数1：上下文,参数2：Provider主机地址 和配置文件中保持一致,参数3：共享的文件
+            Uri apkUri = FileProvider.getUriForFile(context, getContext().getApplicationContext().getPackageName() + &quot;.provider&quot;,file);
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, &quot;application/vnd.android.package-archive&quot;);
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), &quot;application/vnd.android.package-archive&quot;);
+        }
+        getActivity().startActivity(intent);
+    }
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Android7-0/" rel="tag"># Android7.0</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/08/Android-Studio常用快捷键/" rel="next" title="Android Studio常用快捷键">
+                <i class="fa fa-chevron-left"></i> Android Studio常用快捷键
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/freelander.png"
+               alt="Shijie Yang" />
+          <p class="site-author-name" itemprop="name">Shijie Yang</p>
+           
+              <p class="site-description motion-element" itemprop="description">花若相惜，花落相依</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APK文件下载"><span class="nav-number">2.</span> <span class="nav-text">APK文件下载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DownloadManager方式"><span class="nav-number">2.1.</span> <span class="nav-text">DownloadManager方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载APK"><span class="nav-number">2.1.1.</span> <span class="nav-text">下载APK</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取DownloadManager对象"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">获取DownloadManager对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载进度查询"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">下载进度查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载监听"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">下载监听</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AsyncTask方法下载"><span class="nav-number">2.2.</span> <span class="nav-text">AsyncTask方法下载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义类继承AsyncTask"><span class="nav-number">2.2.1.</span> <span class="nav-text">自定义类继承AsyncTask</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载-1"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UI显示进度"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">UI显示进度</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装APK"><span class="nav-number">3.</span> <span class="nav-text">安装APK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-7-0版本之前"><span class="nav-number">3.1.</span> <span class="nav-text">Android 7.0版本之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android7-0之后"><span class="nav-number">3.2.</span> <span class="nav-text">Android7.0之后</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FileProvider"><span class="nav-number">3.2.1.</span> <span class="nav-text">FileProvider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APK安装"><span class="nav-number">3.2.2.</span> <span class="nav-text">APK安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注册provider"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">注册provider</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建xml文件file-paths"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">创建xml文件file_paths</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#读取FileProvider"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">读取FileProvider</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#兼容的安装方式"><span class="nav-number">3.3.</span> <span class="nav-text">兼容的安装方式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shijie Yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
