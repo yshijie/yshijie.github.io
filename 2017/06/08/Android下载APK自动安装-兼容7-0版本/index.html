@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/06/08/Android下载APK自动安装-兼容7-0版本/index.html">
 <meta property="og:site_name" content="Freelander_Blog">
 <meta property="og:description" content="前言在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。 APK文件下载对于APK文件的下载，我这里介绍两种方式  系统自带的DownloadManager下载 通过异步任务Asyn">
-<meta property="og:updated_time" content="2017-06-08T10:01:53.737Z">
+<meta property="og:updated_time" content="2017-06-09T02:24:26.752Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android下载APK自动安装(兼容7.0版本)">
 <meta name="twitter:description" content="前言在Android开发中，下载和安装APK是经常需要的，简单的项目升级，更新APP就需要我们实现APK文件的下载和安装，但是在Android 7.0之后，对于自动安装这块又有了一些新的限制。导致我们无法像之前版本那样直接通过Intent跳转一下就OK，下面详细说一下这块。 APK文件下载对于APK文件的下载，我这里介绍两种方式  系统自带的DownloadManager下载 通过异步任务Asyn">
@@ -637,6 +637,28 @@ public Cursor query(Query query) {
             android:resource=&quot;@xml/file_paths&quot; /&gt;
     &lt;/provider&gt;
 </code></pre><p>其中：android:authorities表示组件的标识，一般为包名+provider，不能和其他应用的重复；android:grantUriPermission=”true”表示授予Uri临时访问权限；android:exported=”false”表示当前内容提供者是否会被其他应用使用。</p>
+<p>注意android:exported这个属性，我们必须指定为false，不能指定为true，否则会抛出异常，我们可以查看一下FileProvider的源码：</p>
+<pre><code>/**
+ * After the FileProvider is instantiated, this method is called to provide the system with information about the provider.
+ *
+ * @param context A {@link Context} for the current component.
+ * @param info A {@link ProviderInfo} for the new provider.
+ */
+@Override
+public void attachInfo(Context context, ProviderInfo info) {
+    super.attachInfo(context, info);
+
+    // Sanity check our security
+    if (info.exported) {
+        throw new SecurityException(&quot;Provider must not be exported&quot;);
+    }
+    if (!info.grantUriPermissions) {
+        throw new SecurityException(&quot;Provider must grant uri permissions&quot;);
+    }
+
+    mStrategy = getPathStrategy(context, info.authority);
+}
+</code></pre><p>通过以上源代码我们可以看出，在FileProvider中会去判断这个属性，如果为true（即info.exported = true），则会抛出new SecurityException(“Provider must not be exported”)这个异常，所以我们必须指定为false。</p>
 <h5 id="创建xml文件file-paths"><a href="#创建xml文件file-paths" class="headerlink" title="创建xml文件file_paths"></a>创建xml文件file_paths</h5><p>在res目录下新建一个xml文件夹，在其中创建file_paths.xml文件，通过这个文件中的内容来对外暴露的文件夹路径，定义如下：</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;paths xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
