@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Hexo,hexo,Github Pages," />
 
 
 
@@ -93,16 +93,19 @@
 
 
 
-<meta name="description" content="花若相惜，花落相依">
+<meta name="description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
+<meta name="keywords" content="Hexo,hexo,Github Pages">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo搭建Github-pages个人博客">
 <meta property="og:url" content="http://yoursite.com/2017/06/08/Hexo搭建Github-pages个人博客/index.html">
 <meta property="og:site_name" content="Freelander_Blog">
-<meta property="og:description" content="花若相惜，花落相依">
-<meta property="og:updated_time" content="2017-06-08T08:22:36.001Z">
+<meta property="og:description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
+<meta property="og:image" content="http://yoursite.com/uploads/node.png">
+<meta property="og:updated_time" content="2017-06-09T01:24:35.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo搭建Github-pages个人博客">
-<meta name="twitter:description" content="花若相惜，花落相依">
+<meta name="twitter:description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
+<meta name="twitter:image" content="http://yoursite.com/uploads/node.png">
 
 
 
@@ -326,6 +329,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -350,7 +375,71 @@
       
 
       
-        
+        <h3 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h3><p>作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。</p>
+<h3 id="环境配置："><a href="#环境配置：" class="headerlink" title="环境配置："></a>环境配置：</h3><p>在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备好，这样方便我们快速搭建博客。</p>
+<ul>
+<li>1.安装Node.js</li>
+<li>2.安装Git</li>
+<li>3.Github账号申请及创建远程仓库</li>
+</ul>
+<h4 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h4><p>根据自己电脑的操作系统去下载对应的安装包并安装，具体的安装过程这里不再叙述，网上百度一大堆，安装好之后可以在cmd命令窗口中去检查是否安装好了，若安装成功会提示对应的版本信息。</p>
+<pre><code>node -v
+npm -v
+</code></pre><p><img src="/uploads/node.png" alt=""></p>
+<h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p>在Git官网去下载对应的安装包，安装之后我们可以在电脑桌面空白处右键，会在弹出菜单中出现Git Bash选项，也可以打开它，在里面输入以下命令查看版本。</p>
+<pre><code>git --version
+</code></pre><p>这里我们需要配置一下环境变量，将Git的安装路径在系统环境变量PATH中配置一下，这样就可以在CMD命令窗口中直接调用Git，不需要打开Git Bash，配置好之后可以在cmd命令窗口中输入以上命令查看。</p>
+<h4 id="Github账号申请及创建远程仓库"><a href="#Github账号申请及创建远程仓库" class="headerlink" title="Github账号申请及创建远程仓库"></a>Github账号申请及创建远程仓库</h4><p>去Github官网注册一个账号，如果已经注册可以跳过次步骤。</p>
+<p>创建一个远程仓库，这里需要注意的是仓库名必须是username.github.io，这里的username是指你在Github的用户名。例如我的：yshijie.github.io</p>
+<p>打开这个仓库，点击该仓库中的Settings选项，找到Github pages，去选择一个主题即可。到这步时其实我们已经可以去访问username.github.io这个网址了。到此准备工作就完成了，我们开始用Hexo去配置博客。</p>
+<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>在合适的地方建一个文件夹作为我们本地的博客仓库，然后打开CMD命令窗口进入该目录，输入以下命令并执行：</p>
+<pre><code>npm install hexo-cli -g
+</code></pre><p>等待他自己去安装hexo，完成之后输入以下命令：</p>
+<pre><code>npm install hexo --save
+</code></pre><p>执行完之后，hexo就算是安装好了，我们可以通过以下命令去检查是否安装完成：</p>
+<pre><code>hexo -v
+</code></pre><h3 id="Hexo相关配置"><a href="#Hexo相关配置" class="headerlink" title="Hexo相关配置"></a>Hexo相关配置</h3><p>初始化Hexo</p>
+<p>输入以下命令：</p>
+<pre><code>hexo init
+hexo install
+</code></pre><p>执行之后npm会自动安装相应的组件，等待完成，接下来就可以相应的操作了。</p>
+<p>输入以下命令：</p>
+<pre><code>hexo d -g
+hexo s
+</code></pre><p>前面是将hexo生成对应的站点并部署，后者是启动本地服务，我们可以输入该网址去查看我们的博客界面：</p>
+<pre><code>http://localhost:4000/
+</code></pre><h3 id="连接Github-pages与Hexo"><a href="#连接Github-pages与Hexo" class="headerlink" title="连接Github pages与Hexo"></a>连接Github pages与Hexo</h3><p>首先设置Git的用户名和邮箱：</p>
+<pre><code>$ git config --global user.name &quot;username&quot;
+$ git config --global user.email &quot;your email address&quot;
+</code></pre><p>生成秘钥</p>
+<pre><code>ssh-keygen -t rsa -C &quot;your email address&quot;
+</code></pre><p>我们也可以通过该命令来查看秘钥文件内容：</p>
+<pre><code>cat /Users/username/.ssh/id_rsa.pub
+</code></pre><p>一路回车下来，打开秘钥文件，默认地址为：</p>
+<pre><code>C/Users/your name/.ssh/id_rsa.pub
+</code></pre><p>复制其中的内容，打开Github的Settings，选择SSH Key的选项，新建一个SSH Key，将该内容复制进去，注意前后不要留空格和回车，其他的默认即可。</p>
+<p>打开我们之前建的文件中，找到_config.yml文件，这是配置文件，打开它找到deploy并修改：</p>
+<pre><code>deploy:
+    type: git
+    repo: git@github.com:yourname/yourname.github.io.git
+    branch: master
+</code></pre><p>这里需要注意的是，冒号后面有个空格。到此我们就将Hexo与Github pages博客链接起来了。</p>
+<h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><p>新建博客之前我们先安装一个扩展，以后部署的时候方便：</p>
+<pre><code>npm install hexo-deployer-git --save
+</code></pre><p>新建博客</p>
+<pre><code>hexo new post &quot;文章题目&quot;
+</code></pre><p>完成之后我们的文件夹中的source/_post/目录下会生成一个”文章题目.md”的文件，选择一个MarkDown编辑器去编辑内容，然后执行（生产，部署或部署前先生成）：</p>
+<pre><code>hexo g 
+hexo d
+</code></pre><p>或者</p>
+<pre><code>hexo d -g
+</code></pre><h3 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h3><p>Hexo有很多主题供我们选择，具体喜欢哪个每个人都不一样，这里我就拿我自己喜欢的一个主题来说，也就是我的博客设置的主题Next主题，感觉这个主题比较简洁，黑白两色，留白较多，比较大气看着。</p>
+<h4 id="下载Next主题"><a href="#下载Next主题" class="headerlink" title="下载Next主题"></a>下载Next主题</h4><p>为了熟悉命令的使用，我们依旧用命令去下载Next主题：</p>
+<pre><code>git clone https://github.com/iissnan/hexo-theme-next themes/next
+</code></pre><h4 id="使用该主题"><a href="#使用该主题" class="headerlink" title="使用该主题"></a>使用该主题</h4><p>打开根目录下的_config.yml文件，找到theme，修改主题：</p>
+<pre><code>theme: next
+</code></pre><p>配置好之后我们可以用面的步骤去生成部署，启动本地服务去查看一下。剩下的就是根据的自己风格去配置根目录下的_config.yml文件或者/themes/next/_config.yml文件。</p>
+
       
     </div>
 
@@ -376,6 +465,16 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+            <a href="/tags/Github-Pages/" rel="tag"># Github Pages</a>
+          
+        </div>
       
 
       
@@ -441,8 +540,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/freelander.png"
@@ -468,7 +576,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -479,7 +587,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -542,6 +650,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建个人博客"><span class="nav-number">1.</span> <span class="nav-text">搭建个人博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置："><span class="nav-number">2.</span> <span class="nav-text">环境配置：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.1.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Git"><span class="nav-number">2.2.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Github账号申请及创建远程仓库"><span class="nav-number">2.3.</span> <span class="nav-text">Github账号申请及创建远程仓库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo"><span class="nav-number">3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo相关配置"><span class="nav-number">4.</span> <span class="nav-text">Hexo相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接Github-pages与Hexo"><span class="nav-number">5.</span> <span class="nav-text">连接Github pages与Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建博客"><span class="nav-number">6.</span> <span class="nav-text">新建博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置主题"><span class="nav-number">7.</span> <span class="nav-text">设置主题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载Next主题"><span class="nav-number">7.1.</span> <span class="nav-text">下载Next主题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用该主题"><span class="nav-number">7.2.</span> <span class="nav-text">使用该主题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
