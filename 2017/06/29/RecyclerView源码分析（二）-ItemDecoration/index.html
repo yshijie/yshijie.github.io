@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo,hexo,Github Pages," />
+  <meta name="keywords" content="Android,源码," />
 
 
 
@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
-<meta name="keywords" content="Hexo,hexo,Github Pages">
+<meta name="description" content="前言我们在使用RecyclerView时很明显就会发现一个比较显著的特征，那就是他默认没有分隔线的。但是RecyclerView作为比LisvView更强大的控件，肯定会有对分隔线的控制。 上一篇文章中我们提到的常用方法addItemDecoration（）方法，就是为item添加装饰，这里的装饰最常用的就是分隔线，但是这并不能满足我们多样化的需求，不过RecyclerView为我们提供了一个抽象">
+<meta name="keywords" content="Android,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo搭建Github-pages个人博客">
-<meta property="og:url" content="http://yoursite.com/2017/06/08/Hexo搭建Github-pages个人博客/index.html">
+<meta property="og:title" content="RecyclerView源码分析（二）--ItemDecoration">
+<meta property="og:url" content="http://yoursite.com/2017/06/29/RecyclerView源码分析（二）-ItemDecoration/index.html">
 <meta property="og:site_name" content="Freelander_Blog">
-<meta property="og:description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
-<meta property="og:image" content="http://yoursite.com/uploads/node.png">
-<meta property="og:updated_time" content="2017-06-09T01:24:35.485Z">
+<meta property="og:description" content="前言我们在使用RecyclerView时很明显就会发现一个比较显著的特征，那就是他默认没有分隔线的。但是RecyclerView作为比LisvView更强大的控件，肯定会有对分隔线的控制。 上一篇文章中我们提到的常用方法addItemDecoration（）方法，就是为item添加装饰，这里的装饰最常用的就是分隔线，但是这并不能满足我们多样化的需求，不过RecyclerView为我们提供了一个抽象">
+<meta property="og:image" content="http://yoursite.com/uploads/itemview.png">
+<meta property="og:updated_time" content="2017-06-29T02:55:39.215Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo搭建Github-pages个人博客">
-<meta name="twitter:description" content="搭建个人博客作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。 环境配置：在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备">
-<meta name="twitter:image" content="http://yoursite.com/uploads/node.png">
+<meta name="twitter:title" content="RecyclerView源码分析（二）--ItemDecoration">
+<meta name="twitter:description" content="前言我们在使用RecyclerView时很明显就会发现一个比较显著的特征，那就是他默认没有分隔线的。但是RecyclerView作为比LisvView更强大的控件，肯定会有对分隔线的控制。 上一篇文章中我们提到的常用方法addItemDecoration（）方法，就是为item添加装饰，这里的装饰最常用的就是分隔线，但是这并不能满足我们多样化的需求，不过RecyclerView为我们提供了一个抽象">
+<meta name="twitter:image" content="http://yoursite.com/uploads/itemview.png">
 
 
 
@@ -133,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/08/Hexo搭建Github-pages个人博客/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/29/RecyclerView源码分析（二）-ItemDecoration/"/>
 
 
 
 
 
-  <title>Hexo搭建Github-pages个人博客 | Freelander_Blog</title>
+  <title>RecyclerView源码分析（二）--ItemDecoration | Freelander_Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -289,7 +289,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/08/Hexo搭建Github-pages个人博客/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/29/RecyclerView源码分析（二）-ItemDecoration/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shijie Yang">
@@ -306,7 +306,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hexo搭建Github-pages个人博客</h1>
+          <h1 class="post-title" itemprop="name headline">RecyclerView源码分析（二）--ItemDecoration</h1>
         
 
         <div class="post-meta">
@@ -318,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-08T16:22:35+08:00">
-                2017-06-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-29T10:54:21+08:00">
+                2017-06-29
               </time>
             
 
@@ -341,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">hexo</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -375,70 +375,129 @@
       
 
       
-        <h3 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h3><p>作为一个后知后觉的coder，才发现Github的好，看到了用Hexo搭建的Github pages博客，内容简洁、清晰，闲来无事中自己也搭建一个博客，不为别的，只为记录一些自己在学习过程中的点点滴滴，也当做笔记吧，毕竟好记性不如烂笔头，再者别人也可以看看是否在学习过程中有跟我同样的困惑，方便解决问题。</p>
-<h3 id="环境配置："><a href="#环境配置：" class="headerlink" title="环境配置："></a>环境配置：</h3><p>在搭建博客之前，我们需要做一些准备工作，把所需要的各种环境及其他内容准备好，这样方便我们快速搭建博客。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们在使用RecyclerView时很明显就会发现一个比较显著的特征，那就是他默认没有分隔线的。但是RecyclerView作为比LisvView更强大的控件，肯定会有对分隔线的控制。</p>
+<p>上一篇文章中我们提到的常用方法addItemDecoration（）方法，就是为item添加装饰，这里的装饰最常用的就是分隔线，但是这并不能满足我们多样化的需求，不过RecyclerView为我们提供了一个抽象类–ItemDecoration，我们可以自定义类去继承该类，自己定义我们的装饰内容。</p>
+<h2 id="RecyclerView-ItemDecoration类"><a href="#RecyclerView-ItemDecoration类" class="headerlink" title="RecyclerView.ItemDecoration类"></a>RecyclerView.ItemDecoration类</h2><p>我们先看一下在RecyclerView中的ItemDecoration类的源码：</p>
+<pre><code>/**
+ * An ItemDecoration allows the application to add a special drawing and layout offset to 
+ * specific item views from the adapter&apos;s data set. This can be useful for drawing 
+ * dividers between items, highlights, visual grouping boundaries and more.
+ *
+ */ 
+public static abstract class ItemDecoration {
+
+    public void onDraw(Canvas c, RecyclerView parent, State state) {
+        onDraw(c, parent);
+    }
+
+    @Deprecated
+    public void onDraw(Canvas c, RecyclerView parent) {
+    }
+
+    public void onDrawOver(Canvas c, RecyclerView parent, State state) {
+        onDrawOver(c, parent);
+    }
+
+    @Deprecated
+    public void onDrawOver(Canvas c, RecyclerView parent) {
+    }
+
+    @Deprecated
+    public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+        outRect.set(0, 0, 0, 0);
+    }
+
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
+        getItemOffsets(outRect, ((LayoutParams) view.getLayoutParams()).getViewLayoutPosition(),
+                parent);
+    }
+}
+</code></pre><p>看了一下，这个类还是比较简单的，里面一共有六个方法，准确的来说应该是三个，我们就挨个分析一下这个类中的方法。</p>
+<h3 id="onDraw"><a href="#onDraw" class="headerlink" title="onDraw()"></a>onDraw()</h3><p>onDraw()方法，这个方法相信大家还是比较熟悉的，在这里也应该能猜到是干什么，就是绘制布局。但是后面还有一个onDrawOver()方法，这两个有啥区别呢，我们先看一下onDraw()方法的注释就明白了：</p>
+<pre><code>/**
+ * Draw any appropriate decorations into the Canvas supplied to the  RecyclerView.
+ * Any content drawn by this method will be drawn before the item views are drawn,
+ * and will thus appear underneath the views.
+ * 
+ * @param c Canvas to draw into
+ * @param parent RecyclerView this ItemDecoration is drawing into
+ * @param state The current state of RecyclerView
+ */
+public void onDraw(Canvas c, RecyclerView parent, State state) {
+    onDraw(c, parent);
+}
+</code></pre><p>在ItemView绘制之前绘制该装饰布局，所以该装饰内容会出现在itemView的下方（这里不明白的继续往下看）。</p>
+<p>我们可以在自定义的类中去实现该方法，实现我们自己的绘制内容。</p>
+<h3 id="onDrawOver"><a href="#onDrawOver" class="headerlink" title="onDrawOver()"></a>onDrawOver()</h3><p>onDrawOver()方法与上面的onDraw()一起看：</p>
+<pre><code>/**
+ * Draw any appropriate decorations into the Canvas supplied to the RecyclerView.
+ * Any content drawn by this method will be drawn after the item views are drawn
+ * and will thus appear over the views.
+ *
+ * @param c Canvas to draw into
+ * @param parent RecyclerView this ItemDecoration is drawing into
+ * @param state The current state of RecyclerView. 
+ */
+public void onDrawOver(Canvas c, RecyclerView parent, State state) {
+    onDrawOver(c, parent);
+}
+</code></pre><p>在itemView绘制之后绘制该装饰布局，所以该装饰内容会出现在itemview的上方。</p>
+<p>这里就有些区别了，一个是在上面，一个是在下面，究竟是啥意思呢。接着往下看。</p>
+<h3 id="getItemOffsets"><a href="#getItemOffsets" class="headerlink" title="getItemOffsets()"></a>getItemOffsets()</h3><pre><code>/**
+ * Retrieve any offsets for the given item.
+ * Each field of &lt;code&gt;outRect&lt;/code&gt; specifies the number of pixels that the item 
+ * view should be inset by, similar to padding or margin. The default implementation 
+ * sets the bounds of outRect to 0 and returns.
+ *
+ * If this ItemDecoration does not affect the positioning of item views, it should set 
+ * all four fields of &lt;code&gt;outRect&lt;/code&gt; (left, top, right, bottom) to zero before 
+ * returning. 
+ *
+ * @param outRect Rect to receive the output. 
+ * @param view    The child view to decorate 
+ * @param parent  RecyclerView this ItemDecoration is decorating 
+ * @param state   The current state of RecyclerView. 
+ */
+public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
+    getItemOffsets(outRect, ((LayoutParams) view.getLayoutParams()).getViewLayoutPosition(), parent);
+}
+</code></pre><p>获取item偏移量，为什么是偏移量呢，我们可以先看一下下面这张图就会明白：</p>
+<p><img src="/uploads/itemview.png" alt=""></p>
+<p>我们的RecyclerView的itemview其实是这样的，只是默认情况下这个outRect的与itemview的间隔即偏移量为0（这个偏移量有些类似于Padding和Margin属性），所以视觉上的感觉就是itemview和outRect重合，但是itemview在上面，也算是itemview覆盖着outRect。</p>
+<p>我们可以通过重写getItemOffsets()方法去指定outRect的top、left、right和bottom，来控制各个方向的间隔，达到分隔线的效果。</p>
+<p>在这里我们在来解释上面的onDraw()和onDrawOver()方法，比如，我们调用onDraw()方法，先去绘制我们的装饰，然后在绘制itemview，这样，itemview就把我们绘制的装饰给覆盖了（前提是他们的位置有冲突），但是onDrawOver()方法正好相反。</p>
+<h2 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h2><p>我们在RecyclerView中可以看到一个方法getItemDecorInsetsForChild()，这个方法里面会去调用我们前面提到的ItemDecoration类中的getItemOffsets()方法。我们看一下这个方法：</p>
+<pre><code>Rect getItemDecorInsetsForChild(View child) {
+    final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+    if (!lp.mInsetsDirty) {
+        return lp.mDecorInsets;
+    }
+
+    if (mState.isPreLayout() &amp;&amp; (lp.isItemChanged() || lp.isViewInvalid())) {
+        // changed/invalid items should not be updated until they are rebound.
+        return lp.mDecorInsets;
+    }
+    final Rect insets = lp.mDecorInsets;
+    insets.set(0, 0, 0, 0);
+    final int decorCount = mItemDecorations.size();
+    for (int i = 0; i &lt; decorCount; i++) {
+        mTempRect.set(0, 0, 0, 0);
+        mItemDecorations.get(i).getItemOffsets(mTempRect, child, this, mState);
+        insets.left += mTempRect.left;
+        insets.top += mTempRect.top;
+        insets.right += mTempRect.right;
+        insets.bottom += mTempRect.bottom;
+    }
+    lp.mInsetsDirty = false;
+    return insets;
+}
+</code></pre><p>然后我们再去追寻这个方法在哪里被调用了，有三个地方，分别是在：</p>
 <ul>
-<li>1.安装Node.js</li>
-<li>2.安装Git</li>
-<li>3.Github账号申请及创建远程仓库</li>
+<li>LayoutManager#measureChild()</li>
+<li>LayoutManager#measureChildWithMargins()</li>
+<li>LayoutManager#calculateItemDecorationsForChild()</li>
 </ul>
-<h4 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h4><p>根据自己电脑的操作系统去下载对应的安装包并安装，具体的安装过程这里不再叙述，网上百度一大堆，安装好之后可以在cmd命令窗口中去检查是否安装好了，若安装成功会提示对应的版本信息。</p>
-<pre><code>node -v
-npm -v
-</code></pre><p><img src="/uploads/node.png" alt=""></p>
-<h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p>在Git官网去下载对应的安装包，安装之后我们可以在电脑桌面空白处右键，会在弹出菜单中出现Git Bash选项，也可以打开它，在里面输入以下命令查看版本。</p>
-<pre><code>git --version
-</code></pre><p>这里我们需要配置一下环境变量，将Git的安装路径在系统环境变量PATH中配置一下，这样就可以在CMD命令窗口中直接调用Git，不需要打开Git Bash，配置好之后可以在cmd命令窗口中输入以上命令查看。</p>
-<h4 id="Github账号申请及创建远程仓库"><a href="#Github账号申请及创建远程仓库" class="headerlink" title="Github账号申请及创建远程仓库"></a>Github账号申请及创建远程仓库</h4><p>去Github官网注册一个账号，如果已经注册可以跳过次步骤。</p>
-<p>创建一个远程仓库，这里需要注意的是仓库名必须是username.github.io，这里的username是指你在Github的用户名。例如我的：yshijie.github.io</p>
-<p>打开这个仓库，点击该仓库中的Settings选项，找到Github pages，去选择一个主题即可。到这步时其实我们已经可以去访问username.github.io这个网址了。到此准备工作就完成了，我们开始用Hexo去配置博客。</p>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>在合适的地方建一个文件夹作为我们本地的博客仓库，然后打开CMD命令窗口进入该目录，输入以下命令并执行：</p>
-<pre><code>npm install hexo-cli -g
-</code></pre><p>等待他自己去安装hexo，完成之后输入以下命令：</p>
-<pre><code>npm install hexo --save
-</code></pre><p>执行完之后，hexo就算是安装好了，我们可以通过以下命令去检查是否安装完成：</p>
-<pre><code>hexo -v
-</code></pre><h3 id="Hexo相关配置"><a href="#Hexo相关配置" class="headerlink" title="Hexo相关配置"></a>Hexo相关配置</h3><p>初始化Hexo</p>
-<p>输入以下命令：</p>
-<pre><code>hexo init
-hexo install
-</code></pre><p>执行之后npm会自动安装相应的组件，等待完成，接下来就可以相应的操作了。</p>
-<p>输入以下命令：</p>
-<pre><code>hexo d -g
-hexo s
-</code></pre><p>前面是将hexo生成对应的站点并部署，后者是启动本地服务，我们可以输入该网址去查看我们的博客界面：</p>
-<pre><code>http://localhost:4000/
-</code></pre><h3 id="连接Github-pages与Hexo"><a href="#连接Github-pages与Hexo" class="headerlink" title="连接Github pages与Hexo"></a>连接Github pages与Hexo</h3><p>首先设置Git的用户名和邮箱：</p>
-<pre><code>$ git config --global user.name &quot;username&quot;
-$ git config --global user.email &quot;your email address&quot;
-</code></pre><p>生成秘钥</p>
-<pre><code>ssh-keygen -t rsa -C &quot;your email address&quot;
-</code></pre><p>我们也可以通过该命令来查看秘钥文件内容：</p>
-<pre><code>cat /Users/username/.ssh/id_rsa.pub
-</code></pre><p>一路回车下来，打开秘钥文件，默认地址为：</p>
-<pre><code>C/Users/your name/.ssh/id_rsa.pub
-</code></pre><p>复制其中的内容，打开Github的Settings，选择SSH Key的选项，新建一个SSH Key，将该内容复制进去，注意前后不要留空格和回车，其他的默认即可。</p>
-<p>打开我们之前建的文件中，找到_config.yml文件，这是配置文件，打开它找到deploy并修改：</p>
-<pre><code>deploy:
-    type: git
-    repo: git@github.com:yourname/yourname.github.io.git
-    branch: master
-</code></pre><p>这里需要注意的是，冒号后面有个空格。到此我们就将Hexo与Github pages博客链接起来了。</p>
-<h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><p>新建博客之前我们先安装一个扩展，以后部署的时候方便：</p>
-<pre><code>npm install hexo-deployer-git --save
-</code></pre><p>新建博客</p>
-<pre><code>hexo new post &quot;文章题目&quot;
-</code></pre><p>完成之后我们的文件夹中的source/_post/目录下会生成一个”文章题目.md”的文件，选择一个MarkDown编辑器去编辑内容，然后执行（生产，部署或部署前先生成）：</p>
-<pre><code>hexo g 
-hexo d
-</code></pre><p>或者</p>
-<pre><code>hexo d -g
-</code></pre><h3 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h3><p>Hexo有很多主题供我们选择，具体喜欢哪个每个人都不一样，这里我就拿我自己喜欢的一个主题来说，也就是我的博客设置的主题Next主题，感觉这个主题比较简洁，黑白两色，留白较多，比较大气看着。</p>
-<h4 id="下载Next主题"><a href="#下载Next主题" class="headerlink" title="下载Next主题"></a>下载Next主题</h4><p>为了熟悉命令的使用，我们依旧用命令去下载Next主题：</p>
-<pre><code>git clone https://github.com/iissnan/hexo-theme-next themes/next
-</code></pre><h4 id="使用该主题"><a href="#使用该主题" class="headerlink" title="使用该主题"></a>使用该主题</h4><p>打开根目录下的_config.yml文件，找到theme，修改主题：</p>
-<pre><code>theme: next
-</code></pre><p>配置好之后我们可以用面的步骤去生成部署，启动本地服务去查看一下。剩下的就是根据的自己风格去配置根目录下的_config.yml文件或者/themes/next/_config.yml文件。</p>
+<p>都是在LayoutManager类中去调用的，用于测量绘制itemview的布局，这个我们后面再LayoutManager中去介绍。</p>
 
       
     </div>
@@ -468,11 +527,9 @@ hexo d
       
         <div class="post-tags">
           
-            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
-          
-            <a href="/tags/Github-Pages/" rel="tag"># Github Pages</a>
+            <a href="/tags/源码/" rel="tag"># 源码</a>
           
         </div>
       
@@ -485,15 +542,15 @@ hexo d
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/06/27/RecyclerView源码分析（一）-常用方法/" rel="next" title="RecyclerView源码分析（一）--常用方法">
+                <i class="fa fa-chevron-left"></i> RecyclerView源码分析（一）--常用方法
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/08/Android-Studio常用快捷键/" rel="prev" title="Android Studio常用快捷键">
-                Android Studio常用快捷键 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -660,7 +717,7 @@ hexo d
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建个人博客"><span class="nav-number">1.</span> <span class="nav-text">搭建个人博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置："><span class="nav-number">2.</span> <span class="nav-text">环境配置：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.1.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Git"><span class="nav-number">2.2.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Github账号申请及创建远程仓库"><span class="nav-number">2.3.</span> <span class="nav-text">Github账号申请及创建远程仓库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo"><span class="nav-number">3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo相关配置"><span class="nav-number">4.</span> <span class="nav-text">Hexo相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接Github-pages与Hexo"><span class="nav-number">5.</span> <span class="nav-text">连接Github pages与Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建博客"><span class="nav-number">6.</span> <span class="nav-text">新建博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置主题"><span class="nav-number">7.</span> <span class="nav-text">设置主题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载Next主题"><span class="nav-number">7.1.</span> <span class="nav-text">下载Next主题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用该主题"><span class="nav-number">7.2.</span> <span class="nav-text">使用该主题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RecyclerView-ItemDecoration类"><span class="nav-number">2.</span> <span class="nav-text">RecyclerView.ItemDecoration类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onDraw"><span class="nav-number">2.1.</span> <span class="nav-text">onDraw()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onDrawOver"><span class="nav-number">2.2.</span> <span class="nav-text">onDrawOver()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getItemOffsets"><span class="nav-number">2.3.</span> <span class="nav-text">getItemOffsets()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用"><span class="nav-number">3.</span> <span class="nav-text">调用</span></a></li></ol></div>
             
 
           </div>
