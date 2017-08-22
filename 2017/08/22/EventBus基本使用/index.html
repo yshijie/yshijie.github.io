@@ -1,0 +1,899 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="EventBus,事件总线,开源框架," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述EventBus是一款对Android的发布/订阅事件总线的常用的开源框架，在日常开发中，使用起来非常方便。能够帮助我们很简洁的实现组件之间的通信，只需要几行代码即可搞定。 简介EventBus工作时，发布者将一个个事件（events）发送到事件总线上，EventBus会根据已经注册的订阅者（subscribers）去分发这些事件，将发布者发布的事件传递给订阅者，订阅者收到之后进行进一步的处理">
+<meta name="keywords" content="EventBus,事件总线,开源框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EventBus基本使用">
+<meta property="og:url" content="http://yoursite.com/2017/08/22/EventBus基本使用/index.html">
+<meta property="og:site_name" content="Freelander_Blog">
+<meta property="og:description" content="概述EventBus是一款对Android的发布/订阅事件总线的常用的开源框架，在日常开发中，使用起来非常方便。能够帮助我们很简洁的实现组件之间的通信，只需要几行代码即可搞定。 简介EventBus工作时，发布者将一个个事件（events）发送到事件总线上，EventBus会根据已经注册的订阅者（subscribers）去分发这些事件，将发布者发布的事件传递给订阅者，订阅者收到之后进行进一步的处理">
+<meta property="og:image" content="http://yoursite.com/uploads/eventbus.png">
+<meta property="og:updated_time" content="2017-08-22T10:39:40.402Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EventBus基本使用">
+<meta name="twitter:description" content="概述EventBus是一款对Android的发布/订阅事件总线的常用的开源框架，在日常开发中，使用起来非常方便。能够帮助我们很简洁的实现组件之间的通信，只需要几行代码即可搞定。 简介EventBus工作时，发布者将一个个事件（events）发送到事件总线上，EventBus会根据已经注册的订阅者（subscribers）去分发这些事件，将发布者发布的事件传递给订阅者，订阅者收到之后进行进一步的处理">
+<meta name="twitter:image" content="http://yoursite.com/uploads/eventbus.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/22/EventBus基本使用/"/>
+
+
+
+
+
+  <title>EventBus基本使用 | Freelander_Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Freelander_Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">未知，才是最可怕的</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/22/EventBus基本使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shijie Yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/freelander.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Freelander_Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EventBus基本使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-22T18:37:30+08:00">
+                2017-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开源框架/" itemprop="url" rel="index">
+                    <span itemprop="name">开源框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>EventBus是一款对Android的发布/订阅事件总线的常用的开源框架，在日常开发中，使用起来非常方便。能够帮助我们很简洁的实现组件之间的通信，只需要几行代码即可搞定。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>EventBus工作时，发布者将一个个事件（events）发送到事件总线上，EventBus会根据已经注册的订阅者（subscribers）去分发这些事件，将发布者发布的事件传递给订阅者，订阅者收到之后进行进一步的处理，总体为观察者模式。</p>
+<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="/uploads/eventbus.png" alt=""></p>
+<p>如上图所示，发布事件到EventBus上，再由EventBus去分发给具体的订阅者。</p>
+<p>所在使用时，我们基本分为三步：订阅、发布事件、接收并处理事件。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>简化组件间的通信<ul>
+<li><ul>
+<li>分离发送方和接收方</li>
+</ul>
+</li>
+<li><ul>
+<li>避免复杂和容易出错的依赖关系及生命周期</li>
+</ul>
+</li>
+<li><ul>
+<li>指定线程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使代码更加简洁</li>
+<li>快速、微小、使用广</li>
+<li>可以设置优先级</li>
+</ul>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><h4 id="在AndroidStudio中"><a href="#在AndroidStudio中" class="headerlink" title="在AndroidStudio中"></a>在AndroidStudio中</h4><p>直接在build.gradle文件的dependencies{}中添加对应的依赖：</p>
+<pre><code>compile &apos;de.greenrobot:eventbus:3.0.0-beta1&apos;
+</code></pre><h4 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h4><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.greenrobot&lt;/groupId&gt;
+    &lt;artifactId&gt;eventbus&lt;/artifactId&gt;
+    &lt;version&gt;3.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>还可以通过下载jar包添加到对应工程的lib目录下。</p>
+<h3 id="注册成为订阅者"><a href="#注册成为订阅者" class="headerlink" title="注册成为订阅者"></a>注册成为订阅者</h3><p>将当前类注册成为订阅者，对应观察者模式中的观察者，当有发布者将事件发布传递过来时，就会接受到该事件，从而进行处理事件。一般在类初始化时注册，在Android中，如在Activity中我们在onCreat()方法中去注册，例如：</p>
+<pre><code>EventBus.getDefault().register(this);
+</code></pre><p>当然，注册之后，当我们的Activity销毁时，需要取消订阅，防止造成内存泄漏：</p>
+<pre><code>EventBus.getDefault().unregister(this);
+</code></pre><h3 id="声明订阅的方法"><a href="#声明订阅的方法" class="headerlink" title="声明订阅的方法"></a>声明订阅的方法</h3><p>在EventBus 3.0中，我们可以自定义订阅方法的方法名（在之前需要使用固定的onEvent(Object event)方法来作为订阅方法），但是需要添加注解@Subscribe，这里需要注意方法必须是public的权限，例如：</p>
+<pre><code>@Subscribe
+public void onEvent(String event) {
+
+    // 处理事件
+    ...
+}
+</code></pre><h3 id="发送事件"><a href="#发送事件" class="headerlink" title="发送事件"></a>发送事件</h3><p>发送事件的方法也很简单，一句代码搞定：</p>
+<pre><code>EventBus.getDefault().post(&quot;Hello EventBus！&quot;);
+</code></pre><p>这样就将该事件发送到EventBus上，注册了对应的订阅者就可以接收到该事件。</p>
+<p>到这里我们其实可以发现这个优先类似于Android中的广播机制，订阅，发送广播，接收广播处理事件，只是比广播实现代码相对简单一些，其实EventBus还有更多的有点，例如指定线程执行等。</p>
+<h2 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h2><h3 id="线程模型"><a href="#线程模型" class="headerlink" title="线程模型"></a>线程模型</h3><p>在EventBus中是可以指定事件处理所在的线程的，即想要让该事件在哪个线程中运行，例如：当我们接收到一个事件，需要我们去调用网络获取数据，由于是耗时操作，所以需要开启子线程去执行，这时我们就可以直接指定该事件在哪个线程去执行。</p>
+<p>指定的方法也很简单，就在注解后面声明</p>
+<pre><code>@Subscribe(threadMode = ThreadMode.BackgroundThread)
+</code></pre><p>点开源码看一下ThreadMode这个类，其实是个枚举类，定义了事件执行的线程模型：</p>
+<pre><code>public enum ThreadMode {
+    /**
+     * ...
+     */
+    PostThread,
+    /**
+     * ...
+     */
+    MainThread,
+    /**
+     * ...
+     */
+    BackgroundThread,
+    /**
+     * ...
+     */
+    Async
+}
+</code></pre><p>这里我们解释一下这四种线程模型：</p>
+<ul>
+<li>ThreadMode.PostThread</li>
+</ul>
+<p>顾名思义，发送线程，当我们在一个线程中发布了事件时，如果指定为这种线程模型，该事件将直接在该线程中去执行，即哪里发送哪里执行，两者在同一个线程中执行。</p>
+<p>使用这种线程模型需要注意的是，当我们在主线程发布事件时，如果处理该事件是耗时操作，直接在主线程执行可能会引起ANR。</p>
+<ul>
+<li>ThreadMode.MainThread</li>
+</ul>
+<p>这个线程模型大家一看就会明白，主线程。在Android中，处理UI显示问题需要在主线程中执行，当我们在子线程中通过耗时操作获取到数据后，需要更新UI，这是需要将事件执行为主线程去执行。</p>
+<p>但要注意不要在该线程中去执行耗时操作。</p>
+<ul>
+<li>ThreadMode.BackgroundThread</li>
+</ul>
+<p>如果该事件是从UI线程中发布出来的，那么处理事件时会开启一个新的子线程去执行；<br>如果该事件是从子线程中发布出来的，那么处理事件将会直接在该子线程中去执行；<br>指定为该线程模型时，不能进行UI更新操作。</p>
+<ul>
+<li>ThreadMode.Async</li>
+</ul>
+<p>指定为该线程模型时，无论事件是从哪个线程中发布出来的，执行处理事件都会重新开启一个线程去执行，该模型中也禁止处理UI更新操作。</p>
+<p>对于这几种线程模型，可以写个Demo，分别制定不同的线程模型，将当前执行的线程名打印出来看一下，这里就不再演示。</p>
+<h3 id="粘性事件"><a href="#粘性事件" class="headerlink" title="粘性事件"></a>粘性事件</h3><p>广播有粘性广播，当然事件也会有粘性事件。</p>
+<p>粘性事件，即事件已经发布之后，再订阅该事件，也能够接受到该事件。</p>
+<h4 id="发送粘性事件"><a href="#发送粘性事件" class="headerlink" title="发送粘性事件"></a>发送粘性事件</h4><p>发送普通事件时直接调用post方法，在发布粘性事件时，需要调用postSticky方法：</p>
+<pre><code>EventBus.getDefault().postSticky(&quot;粘性事件&quot;);
+</code></pre><h4 id="订阅粘性事件"><a href="#订阅粘性事件" class="headerlink" title="订阅粘性事件"></a>订阅粘性事件</h4><p>订阅粘性事件时，需要在注解后面声明该事件为粘性事件，即：</p>
+<pre><code>@Subscribe(sticky = true)
+public void XXX(String event) {
+    // 处理事件
+    ......
+}
+</code></pre><p>这里需要注意的是，虽然可以接受粘性事件，但是，只能接受最后一条粘性事件，即如果发送了N条事件，但是订阅者只能接收到最后发送的一条事件。</p>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>事件类似于广播一样，也具有优先级，当多个订阅者订阅同一个事件时，优先级越高，越优先获取事件。</p>
+<p>使用时也是在注解后面声明该事件的优先级，例如：</p>
+<pre><code>@Subscribe(priority = 100)
+public void onEvent(Stirng event){
+    // 处理事件
+    ...
+}
+</code></pre><h4 id="事件拦截"><a href="#事件拦截" class="headerlink" title="事件拦截"></a>事件拦截</h4><p>有了优先级当有就会想到是否可以在优先级高的订阅者将该事件拦截下来，当然是可以的。</p>
+<p>在事件处理方法中，可以调用cancelEventDelivery()方法阻止该事件的继续传递，达到拦截的效果。</p>
+<pre><code>@Subscribe(priority = 100)
+public void onEvent(Stirng event){
+    // 处理事件
+    ...
+    // 处理完事件，不希望该事件继续传递，拦截
+    EventBus.getDefault().cancelEventDelivery(event);
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/EventBus/" rel="tag"># EventBus</a>
+          
+            <a href="/tags/事件总线/" rel="tag"># 事件总线</a>
+          
+            <a href="/tags/开源框架/" rel="tag"># 开源框架</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/29/RecyclerView源码分析（二）-ItemDecoration/" rel="next" title="RecyclerView源码分析（二）--ItemDecoration">
+                <i class="fa fa-chevron-left"></i> RecyclerView源码分析（二）--ItemDecoration
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/freelander.png"
+               alt="Shijie Yang" />
+          <p class="site-author-name" itemprop="name">Shijie Yang</p>
+           
+              <p class="site-description motion-element" itemprop="description">花若相惜，花落相依</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://yshijie.github.io/" target="_blank" title="博客首页">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  博客首页
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yshijie" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/freelander_j" target="_blank" title="CSDN博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN博客
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3924868850/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图解"><span class="nav-number">1.2.</span> <span class="nav-text">图解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.3.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">2.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.1.</span> <span class="nav-text">添加依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在AndroidStudio中"><span class="nav-number">2.1.1.</span> <span class="nav-text">在AndroidStudio中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Maven"><span class="nav-number">2.1.2.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">2.1.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册成为订阅者"><span class="nav-number">2.2.</span> <span class="nav-text">注册成为订阅者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明订阅的方法"><span class="nav-number">2.3.</span> <span class="nav-text">声明订阅的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送事件"><span class="nav-number">2.4.</span> <span class="nav-text">发送事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进阶使用"><span class="nav-number">3.</span> <span class="nav-text">进阶使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程模型"><span class="nav-number">3.1.</span> <span class="nav-text">线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘性事件"><span class="nav-number">3.2.</span> <span class="nav-text">粘性事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发送粘性事件"><span class="nav-number">3.2.1.</span> <span class="nav-text">发送粘性事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#订阅粘性事件"><span class="nav-number">3.2.2.</span> <span class="nav-text">订阅粘性事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级"><span class="nav-number">3.3.</span> <span class="nav-text">优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#事件拦截"><span class="nav-number">3.3.1.</span> <span class="nav-text">事件拦截</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shijie Yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
