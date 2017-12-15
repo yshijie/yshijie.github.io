@@ -1,0 +1,1119 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,IOS,Jscript,WebView,Webview交互," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在WebView的开发中，经常需要用到本地函数与H5界面或者Js交互，传递数据等，但是都知道Android本身自带的WebView与Js交互方式通过addJavascriptInterface这种桥接方式存在安全隐患问题，这个可以网上查一大堆，这里提供一种可行的方式进行交互，方便Android与IOS同时使用–WebViewJavascriptBridge。 github地址https://g">
+<meta name="keywords" content="Android,IOS,Jscript,WebView,Webview交互">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebViewJavascriptBridge与Android-IOS交互">
+<meta property="og:url" content="http://yoursite.com/2017/12/15/WebViewJavascriptBridge与Android-IOS交互/index.html">
+<meta property="og:site_name" content="Freelander_Blog">
+<meta property="og:description" content="前言在WebView的开发中，经常需要用到本地函数与H5界面或者Js交互，传递数据等，但是都知道Android本身自带的WebView与Js交互方式通过addJavascriptInterface这种桥接方式存在安全隐患问题，这个可以网上查一大堆，这里提供一种可行的方式进行交互，方便Android与IOS同时使用–WebViewJavascriptBridge。 github地址https://g">
+<meta property="og:image" content="http://yoursite.com/uploads/js1.png">
+<meta property="og:image" content="http://yoursite.com/uploads/java1.png">
+<meta property="og:image" content="http://yoursite.com/uploads/java2.png">
+<meta property="og:image" content="http://yoursite.com/uploads/js2.png">
+<meta property="og:image" content="http://yoursite.com/uploads/java3.png">
+<meta property="og:image" content="http://yoursite.com/uploads/js3.png">
+<meta property="og:image" content="http://yoursite.com/uploads/java4.png">
+<meta property="og:image" content="http://yoursite.com/uploads/js4.png">
+<meta property="og:updated_time" content="2017-12-15T07:09:30.345Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WebViewJavascriptBridge与Android-IOS交互">
+<meta name="twitter:description" content="前言在WebView的开发中，经常需要用到本地函数与H5界面或者Js交互，传递数据等，但是都知道Android本身自带的WebView与Js交互方式通过addJavascriptInterface这种桥接方式存在安全隐患问题，这个可以网上查一大堆，这里提供一种可行的方式进行交互，方便Android与IOS同时使用–WebViewJavascriptBridge。 github地址https://g">
+<meta name="twitter:image" content="http://yoursite.com/uploads/js1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/15/WebViewJavascriptBridge与Android-IOS交互/"/>
+
+
+
+
+
+  <title>WebViewJavascriptBridge与Android-IOS交互 | Freelander_Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Freelander_Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">未知，才是最可怕的</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/15/WebViewJavascriptBridge与Android-IOS交互/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shijie Yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/freelander.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Freelander_Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WebViewJavascriptBridge与Android-IOS交互</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T15:06:08+08:00">
+                2017-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在WebView的开发中，经常需要用到本地函数与H5界面或者Js交互，传递数据等，但是都知道Android本身自带的WebView与Js交互方式通过addJavascriptInterface这种桥接方式存在安全隐患问题，这个可以网上查一大堆，这里提供一种可行的方式进行交互，方便Android与IOS同时使用–WebViewJavascriptBridge。</p>
+<h2 id="github地址"><a href="#github地址" class="headerlink" title="github地址"></a>github地址</h2><p><a href="https://github.com/lzyzsd/JsBridge" target="_blank" rel="external">https://github.com/lzyzsd/JsBridge</a></p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ul>
+<li>Js调用Android（IOS）本地方法（获取回调）；</li>
+<li>Android（IOS）本地调用Html函数；</li>
+<li>Android（IOS）本地调用Html函数并获取回调；</li>
+</ul>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><pre><code>repositories {
+    // ...
+    maven { url &quot;https://jitpack.io&quot; }
+}
+
+dependencies {
+    compile &apos;com.github.lzyzsd:jsbridge:1.0.4&apos;
+}
+</code></pre><p>这里需要注意的一个坑：不建议直接添加github依赖，1.0.4版本存在很多问题，会在使用中出现不稳定情况，例如js无法获取Android（IOS）的回调值等。</p>
+<h2 id="推荐方式"><a href="#推荐方式" class="headerlink" title="推荐方式"></a>推荐方式</h2><p>直接将该库中的library clone下来，作为Module导入并依赖。</p>
+<h2 id="简单封装JS库文件"><a href="#简单封装JS库文件" class="headerlink" title="简单封装JS库文件"></a>简单封装JS库文件</h2><p>为了使Android和IOS同时使用，方便开发时Html界面调用，这里抽出一个JS库，统一Android和IOS的调用方式。</p>
+<p>以下代码都是js文件中的（NativeApp.js）</p>
+<h3 id="判断手机类型"><a href="#判断手机类型" class="headerlink" title="判断手机类型"></a>判断手机类型</h3><pre><code>/**
+ * 获取系统类型 （根据userAgent判断）
+ * IOS 苹果
+ * ANDROID 安卓
+ * UNKOWN 未知
+ */
+getOSType : function(){
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf(&apos;Android&apos;) &gt; -1 || u.indexOf(&apos;Adr&apos;) &gt; -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if(isAndroid){
+        return &apos;ANDROID&apos;;
+    }else if(isiOS){
+        return &apos;IOS&apos;;
+    }else{
+        return &apos;UNKOWN&apos;;
+    }
+}
+</code></pre><h3 id="设置Android手机桥接"><a href="#设置Android手机桥接" class="headerlink" title="设置Android手机桥接"></a>设置Android手机桥接</h3><p>Android在使用该库时需要初始化配置，这段代码必须设置在Js中。</p>
+<pre><code>/**
+ * android系统js桥接口设置
+ * @param {Object} callback 桥接口回调函数 桥接方式固定写法
+ */
+setUpAndroidBridge: function (callback) {
+    if(window.WebViewJavascriptBridge) {
+        return callback(WebViewJavascriptBridge);
+    } else {
+         document.addEventListener(
+             &apos;WebViewJavascriptBridgeReady&apos;,
+             function() {
+                 return callback(WebViewJavascriptBridge);
+             },
+             false
+         );
+     }
+}
+</code></pre><h3 id="设置IOS手机桥接"><a href="#设置IOS手机桥接" class="headerlink" title="设置IOS手机桥接"></a>设置IOS手机桥接</h3><p>IOS在使用时配置该库的代码如下：</p>
+<pre><code>/**
+ * IOS系统js桥接口设置
+ * @param {Object} callback 桥接口回调函数 桥接方式固定写法
+ */
+setUpIOSBridge : function (callback) {
+    if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+    if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+    window.WVJBCallbacks = [callback];
+    var WVJBIframe = document.createElement(&apos;iframe&apos;);
+    WVJBIframe.style.display = &apos;none&apos;;
+    WVJBIframe.src = &apos;https://__bridge_loaded__&apos;;
+    document.documentElement.appendChild(WVJBIframe);
+    setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+}
+</code></pre><h3 id="设置Android和IOS统一桥接口"><a href="#设置Android和IOS统一桥接口" class="headerlink" title="设置Android和IOS统一桥接口"></a>设置Android和IOS统一桥接口</h3><p>为了方便Html端的调用，在JS文件中，将Android和IOS的桥接口统一设置。</p>
+<pre><code>/**
+ * Android和IOS 统一桥接口
+ *
+ * data 请求参数封装
+ *     如  var data = {
+ *            &apos;action&apos;: &apos;closeWebViewPage&apos;,
+ *            &apos;data&apos;:&apos;关闭当前webView视图&apos;
+ *
+ *         };
+ *
+ * callback 结果返回值回调
+ *     如 var callbackFun = function(resultdata){
+ *            //resultdata 为具体返回值封装
+ *        }
+ *
+ *
+ */
+setUpBridge:function(data,resultCallback){
+    var osType = this.getOSType();//获取系统类型
+    //按系统类型 分别执行原生交互
+    if(osType==&apos;IOS&apos;) {
+        //苹果手机交互方式 消息体为字面量对象(json格式)： action 代表执行的动作 data 代表传递的数据
+        this.setUpIOSBridge(function(bridge) {
+            bridge.callHandler(&apos;IOSNativeApp&apos;,data, function(response) {
+                if(typeof resultCallback == &apos;function&apos;) {
+                    resultCallback(response);
+                }
+            });
+        });
+    } else if(osType == &apos;ANDROID&apos;) {
+        //安卓手机交互方式
+        this.setUpAndroidBridge(function(bridge) {
+            bridge.callHandler(&apos;AndroidNativeApp&apos;, data, function(response) {
+                if(typeof resultCallback == &apos;function&apos;) {
+                    resultCallback(response);
+                }
+            });
+        });
+    }else {
+        //其他类型
+    }
+}
+</code></pre><h3 id="JS调用函数"><a href="#JS调用函数" class="headerlink" title="JS调用函数"></a>JS调用函数</h3><p>在Js中设置两个函数，分别实现不同的功能（一个是关闭本地界面，一个是回传用户信息），为了方便在Html中调用，这里在JS中设置了两个方法，可以根据自己的实际情况封装，这里只是为了演示。</p>
+<p>关闭（返回）界面：</p>
+<pre><code>/**
+ * 关闭当前WebView视图页面，并返回上一级原生界面
+ */
+closeWebViewPage : function() {
+    var data = {
+        &apos;action&apos;: &apos;closeWebViewPage&apos;,
+        &apos;data&apos;:&apos;关闭当前webView视图&apos;
+    };
+    this.setUpBridge(data,null);
+}
+</code></pre><p>获取当前登录用户：</p>
+<pre><code>/**
+ * 获取当前用户信息
+ * resultCallback 为一个回调处理函数，函数参数为返回值
+ * 如 
+ * var resultCallback = function(resultData){
+ *
+ * }
+ * 
+ */
+getCurrentUserInfo :function(resultCallback) {
+       var data = {
+            &apos;action&apos;: &apos;getCurrentUserInfo&apos;,
+            &apos;data&apos;:&apos;获取用户信息&apos;
+       };
+    this.setUpBridge(data,resultCallback);
+}
+</code></pre><h3 id="JS库文件整体代码"><a href="#JS库文件整体代码" class="headerlink" title="JS库文件整体代码"></a>JS库文件整体代码</h3><pre><code>var NativeApp = {
+
+    closeWebViewPage : function() {...}
+
+    getCurrentUserInfo :function(resultCallback) {...}
+
+    getOSType : function(){...}
+
+    setUpBridge:function(data,resultCallback){...}
+
+    setUpIOSBridge : function (callback) {...}
+
+    setUpAndroidBridge: function (callback) {...}
+
+}
+</code></pre><h2 id="Html页面设置"><a href="#Html页面设置" class="headerlink" title="Html页面设置"></a>Html页面设置</h2><p>这里需要将定义好的Js库引入使用，这里设置了两个点击按钮用于调用java本地方法（一个关闭界面，一个获取用户数据），并定义两个用于显示内容的标签（一个显示java主动调用带的参数，一个用于显示主动获取的java数据）。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;!--导入--&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;NativeApp.js&quot; &gt;&lt;/script&gt;
+&lt;script&gt;
+
+    function testClick() {
+        //关闭web页面
+        NativeApp.closeWebViewPage();
+    }
+
+
+    var resultCallBack = function(resultData){
+        bridgeLog(&apos;来自Java的回传数据： &apos; + resultData);
+    }
+
+    function testClick1() {
+        //获取用户信息
+        NativeApp.getCurrentUserInfo(resultCallBack);
+    }
+
+    var resultCallBack2 = function(result) {
+        showDataFromNative(result);
+    }
+
+    function bridgeLog(logContent) {
+        document.getElementById(&quot;log_msg&quot;).innerHTML = logContent;
+    }
+
+    function showDataFromNative(dataFromNative) {
+        document.getElementById(&quot;data_from_native&quot;).innerHTML = dataFromNative;
+    }
+
+    NativeApp.setUpAndroidBridge(function(bridge) {
+        bridge.registerHandler(&quot;functionInJs&quot;, function(data, resultCallback){
+            console.log(&quot;Js收到Native的调用（需要返回值）：&quot; + data);
+            showDataFromNative(data);
+            resultCallback(&quot;js 已接收&quot;);
+        });
+    })
+
+    NativeApp.setUpAndroidBridge(function(bridge) {
+        bridge.registerHandler(&quot;functionInJs_2&quot;, function(data, resultCallback){
+            console.log(&quot;Js收到Native的调用：&quot; + data);
+            showDataFromNative(data);
+        });
+    })
+
+
+&lt;/script&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot;&gt;
+        &lt;title&gt;&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;测试WebViewJsBridge&lt;/p&gt;
+        &lt;div&gt;
+            &lt;button onClick=&quot;testClick()&quot;&gt;关闭视图界面&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;br/&gt;
+        &lt;div&gt;
+            &lt;button onClick=&quot;testClick1()&quot;&gt;获取用户信息&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;br/&gt;
+        &lt;div id=&quot;log_msg&quot;&gt;data&lt;/div&gt;
+        &lt;br/&gt;
+        &lt;div id=&quot;data_from_native&quot;&gt;data&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>界面显示如下：</p>
+<p><img src="/uploads/js1.png" alt=""></p>
+<p>Html这里调用的时候需要注意的是，我这里是通过两个点击按钮去主动触发的JS调用本地方法，这里没法在Js中直接使用（即在Js中直接NativeApp.closeWebViewPage()）,但是可以通过settimeout来触发：</p>
+<pre><code>setTimeout(function(){
+    console.log(&quot;setTimeout---&gt;&quot;);
+    NativeApp.getCurrentUserInfo(resultCallBack);
+},500);
+</code></pre><h2 id="Android端使用（这里省略IOS，用法基本相同）"><a href="#Android端使用（这里省略IOS，用法基本相同）" class="headerlink" title="Android端使用（这里省略IOS，用法基本相同）"></a>Android端使用（这里省略IOS，用法基本相同）</h2><h3 id="xml布局设置"><a href="#xml布局设置" class="headerlink" title="xml布局设置"></a>xml布局设置</h3><p>使用该库时，需要将原生的webView控件改为BridgeWebView。为了方便演示，下面多加几个点击控件和显示控件。</p>
+<pre><code>&lt;com.github.lzyzsd.jsbridge.BridgeWebView
+    android:id=&quot;@+id/test_bridge_webView&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_below=&quot;@+id/web_view&quot;
+    android:layout_height=&quot;200dp&quot;/&gt;
+&lt;Button
+    android:id=&quot;@+id/btn_to_js&quot;
+    android:layout_margin=&quot;10dp&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_below=&quot;@+id/test_bridge_webView&quot;
+    android:text=&quot;Native调用JS并获取JS返回值&quot;
+    android:layout_height=&quot;wrap_content&quot;/&gt;
+&lt;Button
+    android:id=&quot;@+id/btn_to_js_2&quot;
+    android:layout_margin=&quot;10dp&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_below=&quot;@+id/btn_to_js&quot;
+    android:text=&quot;Native调用JS&quot;
+    android:layout_height=&quot;wrap_content&quot;/&gt;
+&lt;TextView
+    android:id=&quot;@+id/tv_text&quot;
+    android:layout_margin=&quot;10dp&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_below=&quot;@+id/btn_to_js_2&quot;
+    android:padding=&quot;5dp&quot;
+    android:layout_height=&quot;wrap_content&quot;/&gt;
+</code></pre><h3 id="Java代码（客户端调用）"><a href="#Java代码（客户端调用）" class="headerlink" title="Java代码（客户端调用）"></a>Java代码（客户端调用）</h3><h4 id="注册webview监听"><a href="#注册webview监听" class="headerlink" title="注册webview监听"></a>注册webview监听</h4><p>给WebView注册监听，当Html页面调用java本地函数时，会响应。这里第一个参数为本地java代码与Js端的约定协议内容，即Js指定要调用的java函数，第二个参数为回调，即java收到Js的调用之后做的回调，这里我将两个合在一起处理了。</p>
+<pre><code>mBridgeWebView.loadUrl(&quot;file:///android_asset/new_file.html&quot;);
+mBridgeWebView.registerHandler(&quot;AndroidNativeApp&quot;, new BridgeHandler() {
+
+    @Override
+    public void handler(String data, CallBackFunction function) {
+        Log.e(TAG, &quot;指定Handler接收来自web的数据：&quot; + data);
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String action = jsonObject.get(&quot;action&quot;).toString();
+            String data1 = jsonObject.getString(&quot;data&quot;);
+            Log.e(&quot;tag&quot;, &quot;action-- : &quot; + action);
+            Log.e(&quot;tag&quot;, &quot;data -- : &quot; + data1);
+            if(action.equals(&quot;closeWebViewPage&quot;)) {
+                finish();
+            } else if(action.equals(&quot;getCurrentUserInfo&quot;)) {
+                function.onCallBack(userName);
+            } else {
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+});
+</code></pre><h4 id="Java主动调用Js函数"><a href="#Java主动调用Js函数" class="headerlink" title="Java主动调用Js函数"></a>Java主动调用Js函数</h4><p>java主动调用Js，Js给出回调返回值</p>
+<pre><code>this.button1.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        String data = &quot;data from native&quot;;
+        mBridgeWebView.callHandler(&quot;functionInJs&quot;, data, new CallBackFunction() {
+            @Override
+            public void onCallBack(String data) {
+                textView.setText(&quot;Native接收到Js返回参数：&quot; + data);
+            }
+        });
+    }
+});
+</code></pre><p>java主动调用Js，不需要获取返回值</p>
+<pre><code>this.button2.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        String data = &quot;data from native&quot;;
+        mBridgeWebView.callHandler(&quot;functionInJs_2&quot;, data, null);
+    }
+});
+</code></pre><h2 id="测试截图"><a href="#测试截图" class="headerlink" title="测试截图"></a>测试截图</h2><ul>
+<li>Js调用Android本地方法，不需要获取返回值</li>
+</ul>
+<p><img src="/uploads/java1.png" alt=""></p>
+<ul>
+<li>Js调用Android本地方法，并获取返回值</li>
+</ul>
+<p><img src="/uploads/java2.png" alt=""></p>
+<p><img src="/uploads/js2.png" alt=""></p>
+<ul>
+<li>Android本地调用Js方法，不需要返回值</li>
+</ul>
+<p><img src="/uploads/java3.png" alt=""></p>
+<p><img src="/uploads/js3.png" alt=""></p>
+<ul>
+<li>Android本地调用Js方法，并获取返回值</li>
+</ul>
+<p><img src="/uploads/java4.png" alt=""></p>
+<p><img src="/uploads/js4.png" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/IOS/" rel="tag"># IOS</a>
+          
+            <a href="/tags/Jscript/" rel="tag"># Jscript</a>
+          
+            <a href="/tags/WebView/" rel="tag"># WebView</a>
+          
+            <a href="/tags/Webview交互/" rel="tag"># Webview交互</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/09/EventBus3-0源码分析（二）-发送流程/" rel="next" title="EventBus3.0源码分析（二）--发送流程">
+                <i class="fa fa-chevron-left"></i> EventBus3.0源码分析（二）--发送流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/freelander.png"
+               alt="Shijie Yang" />
+          <p class="site-author-name" itemprop="name">Shijie Yang</p>
+           
+              <p class="site-description motion-element" itemprop="description">花若相惜，花落相依</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://yshijie.github.io/" target="_blank" title="博客首页">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  博客首页
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yshijie" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/freelander_j" target="_blank" title="CSDN博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN博客
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3924868850/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github地址"><span class="nav-number">1.1.</span> <span class="nav-text">github地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">1.2.</span> <span class="nav-text">功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐方式"><span class="nav-number">2.2.</span> <span class="nav-text">推荐方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单封装JS库文件"><span class="nav-number">2.3.</span> <span class="nav-text">简单封装JS库文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判断手机类型"><span class="nav-number">2.3.1.</span> <span class="nav-text">判断手机类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Android手机桥接"><span class="nav-number">2.3.2.</span> <span class="nav-text">设置Android手机桥接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置IOS手机桥接"><span class="nav-number">2.3.3.</span> <span class="nav-text">设置IOS手机桥接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Android和IOS统一桥接口"><span class="nav-number">2.3.4.</span> <span class="nav-text">设置Android和IOS统一桥接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS调用函数"><span class="nav-number">2.3.5.</span> <span class="nav-text">JS调用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS库文件整体代码"><span class="nav-number">2.3.6.</span> <span class="nav-text">JS库文件整体代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Html页面设置"><span class="nav-number">2.4.</span> <span class="nav-text">Html页面设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android端使用（这里省略IOS，用法基本相同）"><span class="nav-number">2.5.</span> <span class="nav-text">Android端使用（这里省略IOS，用法基本相同）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#xml布局设置"><span class="nav-number">2.5.1.</span> <span class="nav-text">xml布局设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java代码（客户端调用）"><span class="nav-number">2.5.2.</span> <span class="nav-text">Java代码（客户端调用）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注册webview监听"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">注册webview监听</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java主动调用Js函数"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">Java主动调用Js函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试截图"><span class="nav-number">2.6.</span> <span class="nav-text">测试截图</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shijie Yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
